@@ -185,14 +185,14 @@
         <span class="block text-xs text-gray-500 mt-2">※ 強引な勧誘は一切いたしません。あなたの時間を無駄にしないことをお約束します。</span>
       </p>
     </div>
-    <div class="grid sm:grid-cols-2 gap-4">
+    <div class="space-y-4">
       <div class="bg-panel rounded-xl p-5 border border-red-500/30">
         <p class="text-red-400 font-bold mb-1">【注意1】枠には限りがあります</p>
-        <p class="text-white/70 text-sm">先着順・お一人様1回まで。今すぐ席を確保してください。</p>
+        <p class="text-white/80 text-sm font-bold">先着順・お一人様1回まで。今すぐ席を確保してください。</p>
       </div>
       <div class="bg-panel rounded-xl p-5 border border-royal/40">
         <p class="font-bold mb-1" style="color:#7aa2ff">【注意2】審査制です</p>
-        <p class="text-white/70 text-sm">本気で事業に向き合う方限定。下記フォームの内容で審査いたします。</p>
+        <p class="text-white/80 text-sm font-bold">本気で事業に向き合う方限定。下記フォームの内容で審査いたします。</p>
       </div>
     </div>
   </div>
@@ -412,7 +412,7 @@ document.getElementById('applyForm').addEventListener('submit', async (e)=>{
   data._decision=decision;
   data._submittedAt=new Date().toISOString();
   if(CONFIG.ENDPOINT){
-    try{ await fetch(CONFIG.ENDPOINT,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(data)}); }
+    try{ await fetch(CONFIG.ENDPOINT,{method:"POST",mode:"no-cors",body:JSON.stringify(data)}); }
     catch(err){ console.warn("send failed",err); }
   }
   document.getElementById('applyForm').classList.add('hidden');
