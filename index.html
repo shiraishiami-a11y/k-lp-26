@@ -41,6 +41,8 @@
   .shine-btn:hover { box-shadow: 0 0 26px rgba(6,199,85,.8), 0 0 8px rgba(6,199,85,.6); }
   @keyframes shine { 0%{ transform: skewX(-20deg) translateX(-250%);} 55%,100%{ transform: skewX(-20deg) translateX(450%);} }
   .sec-accent { border-left:4px solid #f6c945; padding-left:.7rem; }
+  .spinner { width:64px;height:64px;border:6px solid rgba(255,255,255,.15);border-top-color:#06c755;border-radius:50%;animation:spin 1s linear infinite;margin-inline:auto; }
+  @keyframes spin { to { transform: rotate(360deg);} }
 </style>
 </head>
 <body class="bg-ink text-white font-sans antialiased">
@@ -328,23 +330,10 @@
       </p>
     </form>
 
-    <div id="passState" class="hidden text-center py-12">
-      <div class="text-gold text-5xl mb-4">✓</div>
-      <h3 class="text-2xl font-black mb-2">審査通過です！</h3>
-      <p class="text-white/70 mb-6">続いて、面談日程の予約ページへご案内します。</p>
-      <a id="expaLink" href="#" class="inline-block bg-gold text-ink font-black rounded-xl px-8 py-4">日程予約ページへ進む</a>
-      <p class="text-white/40 text-xs mt-4">自動で移動しない場合は上のボタンを押してください。</p>
-    </div>
-
-    <div id="pendingState" class="hidden text-center py-12">
-      <div class="text-5xl mb-4" style="color:#06c755">✓</div>
-      <h3 class="text-2xl font-black mb-2">ご応募ありがとうございます</h3>
-      <p class="text-white/70 mb-6 leading-relaxed">
-        続いて<b class="text-white">公式LINE</b>のご登録へお進みください。<br />
-        <b class="text-white">1営業日以内</b>に審査結果と面談日程をLINEでご案内します。
-      </p>
-      <a id="lineLink" href="#" class="inline-block bg-[#06c755] text-white font-black rounded-xl px-8 py-4 hover:brightness-110 transition">LINEで受け取る</a>
-      <p class="text-white/40 text-xs mt-4">自動で移動しない場合は上のボタンを押してください。</p>
+    <div id="loadingState" class="hidden text-center py-20">
+      <div class="spinner mb-7"></div>
+      <h3 class="text-xl sm:text-2xl font-black mb-2">審査中です…</h3>
+      <p class="text-white/60 text-sm">内容を確認しています。そのまま少々お待ちください。</p>
     </div>
   </div>
 </section>
@@ -365,12 +354,13 @@ const CONFIG = {
   EXPA_URL: "https://ex-pa.jp/item/61094",
   PASS_URL: "pass.html",
   HOLD_URL: "hold.html",
+  NG_URL: "ng.html",
   LINE_URL: "https://line.me/ti/p/%40461iummc",
   ENDPOINT: "",
   MIN_MONTHLY_REVENUE_OK: ["30-100","100-300","300-1000","1000+"],
   EXCLUDE_YAMATO_MEMBER: true,
   EXCLUDE_NO_INVEST: true,
-  REDIRECT_DELAY_MS: 1800,
+  REVIEW_MS: 10000, // 「審査中…」ローディングの長さ(ms)
 };
 
 /* ====== 成功事例（写真は images/ に同梱） ====== */
@@ -406,34 +396,29 @@ CASES.forEach(([name,role,img,body])=>{
 
 /* ====== 審査ロジック＋送信 ====== */
 function judge(data){
-  if(CONFIG.EXCLUDE_YAMATO_MEMBER && data.yamato_member==="yes") return "pending";
-  if(!CONFIG.MIN_MONTHLY_REVENUE_OK.includes(data.revenue)) return "pending";
-  if(CONFIG.EXCLUDE_NO_INVEST && data.invest==="free_only") return "pending";
+  if(data.yamato_member==="yes") return "ng"; // 大和ViSion既存参加者は対象外
+  if(!CONFIG.MIN_MONTHLY_REVENUE_OK.includes(data.revenue)) return "pending"; // 月商30万未満は保留
+  if(CONFIG.EXCLUDE_NO_INVEST && data.invest==="free_only") return "pending"; // 投資意思なしは保留
   if(data.invest_budget==="lt3") return "pending"; // 自己投資 月3万円未満は保留
   return "pass";
 }
-document.getElementById('applyForm').addEventListener('submit', async (e)=>{
+document.getElementById('applyForm').addEventListener('submit', (e)=>{
   e.preventDefault();
   const data=Object.fromEntries(new FormData(e.target).entries());
   const decision=judge(data);
   data._decision=decision;
   data._submittedAt=new Date().toISOString();
+  // 申込データ記録（no-cors / fire-and-forget）
   if(CONFIG.ENDPOINT){
-    try{ await fetch(CONFIG.ENDPOINT,{method:"POST",mode:"no-cors",body:JSON.stringify(data)}); }
+    try{ fetch(CONFIG.ENDPOINT,{method:"POST",mode:"no-cors",body:JSON.stringify(data)}); }
     catch(err){ console.warn("send failed",err); }
   }
+  // 「審査中…」ローディングを表示 → 一定時間後に結果ページへ遷移
   document.getElementById('applyForm').classList.add('hidden');
-  if(decision==="pass"){
-    document.getElementById('expaLink').href=CONFIG.PASS_URL;
-    document.getElementById('passState').classList.remove('hidden');
-    document.getElementById('passState').scrollIntoView({behavior:'smooth'});
-    setTimeout(()=>{ window.location.href=CONFIG.PASS_URL; }, CONFIG.REDIRECT_DELAY_MS);
-  }else{
-    document.getElementById('lineLink').href=CONFIG.HOLD_URL;
-    document.getElementById('pendingState').classList.remove('hidden');
-    document.getElementById('pendingState').scrollIntoView({behavior:'smooth'});
-    setTimeout(()=>{ window.location.href=CONFIG.HOLD_URL; }, CONFIG.REDIRECT_DELAY_MS);
-  }
+  document.getElementById('loadingState').classList.remove('hidden');
+  document.getElementById('loadingState').scrollIntoView({behavior:'smooth',block:'center'});
+  const dest = decision==="pass" ? CONFIG.PASS_URL : (decision==="ng" ? CONFIG.NG_URL : CONFIG.HOLD_URL);
+  setTimeout(()=>{ window.location.href=dest; }, CONFIG.REVIEW_MS);
 });
 </script>
 </body>
