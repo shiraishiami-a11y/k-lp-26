@@ -306,7 +306,14 @@
       </div>
       <div>
         <label class="block text-sm mb-1 req">学びにかけられる自己投資金額（月額）を教えてください</label>
-        <input name="invest_budget" required class="field" placeholder="例：月3万円" />
+        <select name="invest_budget" required class="field">
+          <option value="">選択してください</option>
+          <option value="lt3">月3万円未満</option>
+          <option value="3-5">月3〜5万円</option>
+          <option value="5-10">月5〜10万円</option>
+          <option value="10-30">月10〜30万円</option>
+          <option value="30+">月30万円以上</option>
+        </select>
       </div>
       <div>
         <label class="block text-sm mb-1">ご紹介者のお名前（いれば）</label>
@@ -355,7 +362,7 @@
 const CONFIG = {
   EXPA_URL: "https://ex-pa.jp/item/61094",
   ENDPOINT: "",
-  MIN_MONTHLY_REVENUE_OK: ["100-300","300-1000","1000+"],
+  MIN_MONTHLY_REVENUE_OK: ["30-100","100-300","300-1000","1000+"],
   EXCLUDE_YAMATO_MEMBER: true,
   EXCLUDE_NO_INVEST: true,
   REDIRECT_DELAY_MS: 1800,
@@ -397,6 +404,7 @@ function judge(data){
   if(CONFIG.EXCLUDE_YAMATO_MEMBER && data.yamato_member==="yes") return "pending";
   if(!CONFIG.MIN_MONTHLY_REVENUE_OK.includes(data.revenue)) return "pending";
   if(CONFIG.EXCLUDE_NO_INVEST && data.invest==="free_only") return "pending";
+  if(data.invest_budget==="lt3") return "pending"; // 自己投資 月3万円未満は保留
   return "pass";
 }
 document.getElementById('applyForm').addEventListener('submit', async (e)=>{
