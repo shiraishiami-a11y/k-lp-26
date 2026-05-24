@@ -364,6 +364,7 @@
 const CONFIG = {
   EXPA_URL: "https://ex-pa.jp/item/61094",
   PASS_URL: "pass.html",
+  HOLD_URL: "hold.html",
   LINE_URL: "https://line.me/ti/p/%40461iummc",
   ENDPOINT: "",
   MIN_MONTHLY_REVENUE_OK: ["30-100","100-300","300-1000","1000+"],
@@ -428,10 +429,10 @@ document.getElementById('applyForm').addEventListener('submit', async (e)=>{
     document.getElementById('passState').scrollIntoView({behavior:'smooth'});
     setTimeout(()=>{ window.location.href=CONFIG.PASS_URL; }, CONFIG.REDIRECT_DELAY_MS);
   }else{
-    document.getElementById('lineLink').href=CONFIG.LINE_URL;
+    document.getElementById('lineLink').href=CONFIG.HOLD_URL;
     document.getElementById('pendingState').classList.remove('hidden');
     document.getElementById('pendingState').scrollIntoView({behavior:'smooth'});
-    setTimeout(()=>{ window.location.href=CONFIG.LINE_URL; }, CONFIG.REDIRECT_DELAY_MS);
+    setTimeout(()=>{ window.location.href=CONFIG.HOLD_URL; }, CONFIG.REDIRECT_DELAY_MS);
   }
 });
 </script>
