@@ -397,10 +397,10 @@ CASES.forEach(([name,role,img,body])=>{
 /* ====== 審査ロジック＋送信 ====== */
 function judge(data){
   if(data.yamato_member==="yes") return "ng"; // 大和ViSion既存参加者は対象外
-  if(!CONFIG.MIN_MONTHLY_REVENUE_OK.includes(data.revenue)) return "pending"; // 月商30万未満は保留
-  if(CONFIG.EXCLUDE_NO_INVEST && data.invest==="free_only") return "pending"; // 投資意思なしは保留
-  if(data.invest_budget==="lt3") return "pending"; // 自己投資 月3万円未満は保留
-  return "pass";
+  // 月商は見ない（不問）
+  if(CONFIG.EXCLUDE_NO_INVEST && data.invest==="free_only") return "pending"; // 「まずは無料の範囲だけ」=保留
+  if(data.invest_budget==="lt3") return "pending"; // 自己投資 月3万円未満=保留
+  return "pass"; // 通過＝検討意思あり＋月3万円以上＋大和未参加（月商不問）
 }
 document.getElementById('applyForm').addEventListener('submit', (e)=>{
   e.preventDefault();
