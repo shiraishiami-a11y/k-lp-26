@@ -246,10 +246,6 @@
         </select>
       </div>
       <div>
-        <label class="block text-sm mb-1">事業内容・運用メディアURL（任意）</label>
-        <input name="business_url" class="field" placeholder="https:// または 事業内容を簡単に" />
-      </div>
-      <div>
         <label class="block text-sm mb-1 req">現在の月商／年商</label>
         <select name="revenue" required class="field">
           <option value="">選択してください</option>
@@ -282,14 +278,6 @@
         </select>
       </div>
       <div>
-        <label class="block text-sm mb-1 req">すでに大和ViSionに参加していますか？</label>
-        <select name="yamato_member" required class="field">
-          <option value="">選択してください</option>
-          <option value="no">参加していない</option>
-          <option value="yes">すでに参加している</option>
-        </select>
-      </div>
-      <div>
         <label class="block text-sm mb-1 req">個別面談で相談したいこと</label>
         <textarea name="topic" required rows="3" class="field" placeholder="今のお悩み・実現したいこと など"></textarea>
       </div>
@@ -312,10 +300,6 @@
           <option value="50〜100万円">50〜100万円</option>
           <option value="100万円以上">100万円以上</option>
         </select>
-      </div>
-      <div>
-        <label class="block text-sm mb-1">ご紹介者のお名前（いれば）</label>
-        <input name="referrer" class="field" />
       </div>
 
       <button type="submit" class="shine-btn w-full bg-[#06c755] text-white font-black text-2xl rounded-xl py-5 shadow-lg shadow-[#06c755]/40 hover:brightness-110 transition">
@@ -392,9 +376,7 @@ CASES.forEach(([name,role,img,body])=>{
 
 /* ====== 審査ロジック＋送信 ====== */
 function judge(data){
-  if(data.yamato_member==="yes") return "ng"; // 大和ViSion既存参加者は対象外
   if(data.invest==="yes_invest") return "pass"; // 「投資してでも本気で学びたい」は無条件で通過
-  // 月商は見ない（不問）
   if(CONFIG.EXCLUDE_NO_INVEST && data.invest==="free_only") return "pending"; // 「まずは無料の範囲だけ」=保留
   if(data.invest_budget==="10万円未満") return "pending"; // 自己投資の総額10万円未満=保留
   return "pass"; // 通過＝（本気投資意思）or（検討意思あり＋総額10万円以上）／大和未参加・月商不問
