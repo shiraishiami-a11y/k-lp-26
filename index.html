@@ -211,12 +211,12 @@
       </div>
       <div class="grid grid-cols-2 gap-3">
         <div>
-          <label class="block text-sm mb-1 req">生年月日</label>
-          <input name="birthdate" type="date" required class="field" />
+          <label class="block text-sm mb-1">生年月日<span class="text-white/40 text-xs">（任意）</span></label>
+          <input name="birthdate" type="date" class="field" />
         </div>
         <div>
-          <label class="block text-sm mb-1 req">性別</label>
-          <select name="gender" required class="field">
+          <label class="block text-sm mb-1">性別<span class="text-white/40 text-xs">（任意）</span></label>
+          <select name="gender" class="field">
             <option value="">選択してください</option>
             <option>男性</option><option>女性</option><option>その他・回答しない</option>
           </select>
@@ -244,7 +244,7 @@
         </select>
       </div>
       <div>
-        <label class="block text-sm mb-1">事業内容・運用メディアURL（あれば）</label>
+        <label class="block text-sm mb-1">事業内容・運用メディアURL（任意）</label>
         <input name="business_url" class="field" placeholder="https:// または 事業内容を簡単に" />
       </div>
       <div>
@@ -305,18 +305,8 @@
         </select>
       </div>
       <div>
-        <label class="block text-sm mb-1 req">学びにかけられる自己投資金額を教えてください</label>
-        <select name="invest_budget" required class="field">
-          <option value="">選択してください</option>
-          <option>〜30万円</option>
-          <option>30〜100万円</option>
-          <option>100〜300万円</option>
-          <option>300万円以上</option>
-        </select>
-      </div>
-      <div>
-        <label class="block text-sm mb-1 req">当セミナー／白石達也を何で知りましたか</label>
-        <input name="source" required class="field" placeholder="例：YouTube / 紹介 / SNS など" />
+        <label class="block text-sm mb-1 req">学びにかけられる自己投資金額（月額）を教えてください</label>
+        <input name="invest_budget" required class="field" placeholder="例：月3万円" />
       </div>
       <div>
         <label class="block text-sm mb-1">ご紹介者のお名前（いれば）</label>
