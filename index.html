@@ -337,12 +337,14 @@
     </div>
 
     <div id="pendingState" class="hidden text-center py-12">
-      <div class="text-5xl mb-4" style="color:#7aa2ff">✓</div>
-      <h3 class="text-2xl font-black mb-2">お申し込みありがとうございます</h3>
-      <p class="text-white/70 leading-relaxed">
-        内容を確認のうえ、<b class="text-white">1営業日以内</b>に審査結果と面談日程を<br class="hidden sm:block" />
-        ご登録のLINE／メールへご連絡いたします。<br />少々お待ちください。
+      <div class="text-5xl mb-4" style="color:#06c755">✓</div>
+      <h3 class="text-2xl font-black mb-2">ご応募ありがとうございます</h3>
+      <p class="text-white/70 mb-6 leading-relaxed">
+        続いて<b class="text-white">公式LINE</b>のご登録へお進みください。<br />
+        <b class="text-white">1営業日以内</b>に審査結果と面談日程をLINEでご案内します。
       </p>
+      <a id="lineLink" href="#" class="inline-block bg-[#06c755] text-white font-black rounded-xl px-8 py-4 hover:brightness-110 transition">LINEで受け取る</a>
+      <p class="text-white/40 text-xs mt-4">自動で移動しない場合は上のボタンを押してください。</p>
     </div>
   </div>
 </section>
@@ -361,6 +363,7 @@
 /* ====== 設定（ここだけ変えればOK） ====== */
 const CONFIG = {
   EXPA_URL: "https://ex-pa.jp/item/61094",
+  LINE_URL: "https://line.me/ti/p/%40461iummc",
   ENDPOINT: "",
   MIN_MONTHLY_REVENUE_OK: ["30-100","100-300","300-1000","1000+"],
   EXCLUDE_YAMATO_MEMBER: true,
@@ -424,8 +427,10 @@ document.getElementById('applyForm').addEventListener('submit', async (e)=>{
     document.getElementById('passState').scrollIntoView({behavior:'smooth'});
     setTimeout(()=>{ window.location.href=CONFIG.EXPA_URL; }, CONFIG.REDIRECT_DELAY_MS);
   }else{
+    document.getElementById('lineLink').href=CONFIG.LINE_URL;
     document.getElementById('pendingState').classList.remove('hidden');
     document.getElementById('pendingState').scrollIntoView({behavior:'smooth'});
+    setTimeout(()=>{ window.location.href=CONFIG.LINE_URL; }, CONFIG.REDIRECT_DELAY_MS);
   }
 });
 </script>
