@@ -307,14 +307,14 @@
         </select>
       </div>
       <div>
-        <label class="block text-sm mb-1 req">学びにかけられる自己投資金額（月額）を教えてください</label>
+        <label class="block text-sm mb-1 req">学びにかけられる自己投資の総額（目安）を教えてください</label>
         <select name="invest_budget" required class="field">
           <option value="">選択してください</option>
-          <option value="lt3">月3万円未満</option>
-          <option value="3-5">月3〜5万円</option>
-          <option value="5-10">月5〜10万円</option>
-          <option value="10-30">月10〜30万円</option>
-          <option value="30+">月30万円以上</option>
+          <option value="10万円未満">10万円未満</option>
+          <option value="10〜30万円">10〜30万円</option>
+          <option value="30〜50万円">30〜50万円</option>
+          <option value="50〜100万円">50〜100万円</option>
+          <option value="100万円以上">100万円以上</option>
         </select>
       </div>
       <div>
@@ -399,8 +399,8 @@ function judge(data){
   if(data.yamato_member==="yes") return "ng"; // 大和ViSion既存参加者は対象外
   // 月商は見ない（不問）
   if(CONFIG.EXCLUDE_NO_INVEST && data.invest==="free_only") return "pending"; // 「まずは無料の範囲だけ」=保留
-  if(data.invest_budget==="lt3") return "pending"; // 自己投資 月3万円未満=保留
-  return "pass"; // 通過＝検討意思あり＋月3万円以上＋大和未参加（月商不問）
+  if(data.invest_budget==="10万円未満") return "pending"; // 自己投資の総額10万円未満=保留
+  return "pass"; // 通過＝検討意思あり＋自己投資の総額10万円以上＋大和未参加（月商不問）
 }
 document.getElementById('applyForm').addEventListener('submit', (e)=>{
   e.preventDefault();
