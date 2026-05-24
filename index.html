@@ -417,7 +417,7 @@ document.getElementById('applyForm').addEventListener('submit', (e)=>{
   document.getElementById('applyForm').classList.add('hidden');
   document.getElementById('loadingState').classList.remove('hidden');
   document.getElementById('loadingState').scrollIntoView({behavior:'smooth',block:'center'});
-  const dest = decision==="pass" ? CONFIG.EXPA_URL : (decision==="ng" ? CONFIG.NG_URL : CONFIG.HOLD_URL);
+  const dest = decision==="pass" ? CONFIG.PASS_URL : (decision==="ng" ? CONFIG.NG_URL : CONFIG.HOLD_URL);
   setTimeout(()=>{ window.location.href=dest; }, CONFIG.REVIEW_MS);
 });
 </script>
